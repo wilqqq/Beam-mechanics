@@ -1,0 +1,30 @@
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.exe.config
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.exe
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.pdb
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.csprojResolveAssemblyReference.cache
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.Form1.resources
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.Properties.Resources.resources
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.csproj.GenerateResource.Cache
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.exe
+c:\users\tomek laptop\documents\visual studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.pdb
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.exe.config
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.exe
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.pdb
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.exe
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\bin\Debug\Informatyka.pdb
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.csprojResolveAssemblyReference.cache
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.Form1.resources
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.Properties.Resources.resources
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\obj\Debug\Informatyka.csproj.GenerateResource.Cache
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\bin\Debug\Informatyka.exe.config
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.exe
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.pdb
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\bin\Debug\Informatyka.exe
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\bin\Debug\Informatyka.pdb
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.csprojResolveAssemblyReference.cache
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.Form1.resources
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.Properties.Resources.resources
+C:\Users\Tomek laptop\Documents\Visual Studio 2015\Projects\Informatyka\Informatyka\Informatyka\obj\Debug\Informatyka.csproj.GenerateResource.Cache
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\InformatykaBuild3.1\Informatyka\bin\Debug\Informatyka.exe.config
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\InformatykaBuild3.1\Informatyka\obj\Debug\Informatyka.exe
+C:\Users\Michał\Documents\Visual Studio 2015\Projects\InformatykaBuild3.1\Informatyka\obj\Debug\Informatyka.pdb
