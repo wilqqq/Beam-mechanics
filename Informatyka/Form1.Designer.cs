@@ -29,18 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.button1 = new System.Windows.Forms.Button();
+            this.addForces = new System.Windows.Forms.Button();
             this.wsuw = new System.Windows.Forms.RadioButton();
             this.podpar = new System.Windows.Forms.RadioButton();
-            this.button2 = new System.Windows.Forms.Button();
+            this.calcBtn = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.pionowe = new System.Windows.Forms.RadioButton();
-            this.poziome = new System.Windows.Forms.RadioButton();
+            this.reactions_list = new System.Windows.Forms.Label();
+            this.removeBtn = new System.Windows.Forms.Button();
+            this.vertical = new System.Windows.Forms.RadioButton();
+            this.horizontal = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
@@ -60,15 +60,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // addForces
             // 
-            this.button1.Location = new System.Drawing.Point(228, 74);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 39);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Dodaj Sily";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.addForces.Location = new System.Drawing.Point(228, 74);
+            this.addForces.Name = "addForces";
+            this.addForces.Size = new System.Drawing.Size(75, 39);
+            this.addForces.TabIndex = 0;
+            this.addForces.Text = "Add Forces";
+            this.addForces.UseVisualStyleBackColor = true;
+            this.addForces.Click += new System.EventHandler(this.button1_Click);
             // 
             // wsuw
             // 
@@ -95,15 +95,15 @@
             this.podpar.UseVisualStyleBackColor = true;
             this.podpar.Click += new System.EventHandler(this.radioButton2_Click);
             // 
-            // button2
+            // calcBtn
             // 
-            this.button2.Location = new System.Drawing.Point(228, 148);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Oblicz";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.calcBtn.Location = new System.Drawing.Point(228, 148);
+            this.calcBtn.Name = "calcBtn";
+            this.calcBtn.Size = new System.Drawing.Size(75, 23);
+            this.calcBtn.TabIndex = 5;
+            this.calcBtn.Text = "Oblicz";
+            this.calcBtn.UseVisualStyleBackColor = true;
+            this.calcBtn.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox1
             // 
@@ -135,56 +135,57 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(225, 32);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.Size = new System.Drawing.Size(83, 13);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Dlugosc belki [m]";
+            this.label3.Text = "Beam length [m]";
             this.label3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // label4
+            // reactions_list
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(228, 190);
-            this.label4.MaximumSize = new System.Drawing.Size(244, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(64, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Spis reakcji:";
-            this.label4.MouseEnter += new System.EventHandler(this.label4_MouseEnter);
-            this.label4.MouseLeave += new System.EventHandler(this.label4_MouseLeave);
-            this.label4.MouseHover += new System.EventHandler(this.label4_MouseHover);
+            this.reactions_list.AutoSize = true;
+            this.reactions_list.Location = new System.Drawing.Point(228, 190);
+            this.reactions_list.MaximumSize = new System.Drawing.Size(244, 0);
+            this.reactions_list.Name = "reactions_list";
+            this.reactions_list.Size = new System.Drawing.Size(73, 13);
+            this.reactions_list.TabIndex = 10;
+            this.reactions_list.Text = "Reactions list:";
+            this.reactions_list.MouseEnter += new System.EventHandler(this.label4_MouseEnter);
+            this.reactions_list.MouseLeave += new System.EventHandler(this.label4_MouseLeave);
+            this.reactions_list.MouseHover += new System.EventHandler(this.label4_MouseHover);
             // 
-            // button3
+            // removeBtn
             // 
-            this.button3.Location = new System.Drawing.Point(228, 119);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Usun sily";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.removeBtn.Location = new System.Drawing.Point(228, 119);
+            this.removeBtn.Name = "removeBtn";
+            this.removeBtn.Size = new System.Drawing.Size(75, 23);
+            this.removeBtn.TabIndex = 11;
+            this.removeBtn.Text = "Remove Forces";
+            this.removeBtn.UseVisualStyleBackColor = true;
+            this.removeBtn.Click += new System.EventHandler(this.button3_Click);
             // 
-            // pionowe
+            // vertical
             // 
-            this.pionowe.AutoSize = true;
-            this.pionowe.Location = new System.Drawing.Point(6, 37);
-            this.pionowe.Name = "pionowe";
-            this.pionowe.Size = new System.Drawing.Size(84, 17);
-            this.pionowe.TabIndex = 12;
-            this.pionowe.TabStop = true;
-            this.pionowe.Text = "Sily pionowe";
-            this.pionowe.UseVisualStyleBackColor = true;
-            this.pionowe.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            this.vertical.AutoSize = true;
+            this.vertical.Location = new System.Drawing.Point(6, 37);
+            this.vertical.Name = "vertical";
+            this.vertical.Size = new System.Drawing.Size(60, 17);
+            this.vertical.TabIndex = 12;
+            this.vertical.TabStop = true;
+            this.vertical.Text = "Vertical";
+            this.vertical.UseVisualStyleBackColor = true;
+            this.vertical.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
-            // poziome
+            // horizontal
             // 
-            this.poziome.AutoSize = true;
-            this.poziome.Location = new System.Drawing.Point(6, 14);
-            this.poziome.Name = "poziome";
-            this.poziome.Size = new System.Drawing.Size(83, 17);
-            this.poziome.TabIndex = 13;
-            this.poziome.TabStop = true;
-            this.poziome.Text = "Sily poziome";
-            this.poziome.UseVisualStyleBackColor = true;
+            this.horizontal.AutoSize = true;
+            this.horizontal.Location = new System.Drawing.Point(6, 14);
+            this.horizontal.Name = "horizontal";
+            this.horizontal.Size = new System.Drawing.Size(72, 17);
+            this.horizontal.TabIndex = 13;
+            this.horizontal.TabStop = true;
+            this.horizontal.Text = "Horizontal";
+            this.horizontal.UseVisualStyleBackColor = true;
+            this.horizontal.CheckedChanged += new System.EventHandler(this.poziome_CheckedChanged);
             // 
             // groupBox1
             // 
@@ -199,8 +200,8 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.pionowe);
-            this.groupBox2.Controls.Add(this.poziome);
+            this.groupBox2.Controls.Add(this.vertical);
+            this.groupBox2.Controls.Add(this.horizontal);
             this.groupBox2.Location = new System.Drawing.Point(319, 101);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(149, 70);
@@ -239,9 +240,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(71, 20);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(72, 13);
+            this.label6.Size = new System.Drawing.Size(59, 13);
             this.label6.TabIndex = 16;
-            this.label6.Text = "Wartosc [Nm]";
+            this.label6.Text = "Value [Nm]";
             // 
             // groupBox3
             // 
@@ -254,7 +255,7 @@
             this.groupBox3.Size = new System.Drawing.Size(154, 162);
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Momenty";
+            this.groupBox3.Text = "Moments";
             this.groupBox3.Visible = false;
             // 
             // groupBox4
@@ -268,16 +269,16 @@
             this.groupBox4.Size = new System.Drawing.Size(154, 162);
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Siły";
+            this.groupBox4.Text = "Forces";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(71, 20);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(64, 13);
+            this.label7.Size = new System.Drawing.Size(51, 13);
             this.label7.TabIndex = 16;
-            this.label7.Text = "Wartosc [N]";
+            this.label7.Text = "Value [N]";
             // 
             // label8
             // 
@@ -324,14 +325,15 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.removeBtn);
+            this.Controls.Add(this.reactions_list);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.calcBtn);
+            this.Controls.Add(this.addForces);
             this.Name = "Form1";
             this.Text = "Belka";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -348,18 +350,18 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button addForces;
         private System.Windows.Forms.RadioButton wsuw;
         private System.Windows.Forms.RadioButton podpar;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button calcBtn;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.RadioButton pionowe;
-        private System.Windows.Forms.RadioButton poziome;
+        private System.Windows.Forms.Label reactions_list;
+        private System.Windows.Forms.Button removeBtn;
+        private System.Windows.Forms.RadioButton vertical;
+        private System.Windows.Forms.RadioButton horizontal;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox4;

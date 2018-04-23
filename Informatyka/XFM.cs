@@ -7,84 +7,84 @@ namespace Informatyka
 {
     class XFM
     {
-        private double dlugosc;
-        private double[] wspolrzednaF;
-        private double[] wartoscSily;
-        private double[] wartoscMomentu;
-        private double[] wspolrzednaM;
+        private double length;
+        private double[] forceCoordinate;
+        private double[] forceValue;
+        private double[] momentValue;
+        private double[] momentCoordinate;
 
-        //setter dlugosci belki
-        public void setDlugosc(double dl) {dlugosc = dl;}
+        //beam length setter
+        public void setLength(double dl) {length = dl;}
 
-        //gettery wartosci tablic
+        //array value getters
         public double getFX(int i)
         {
-            try { return wspolrzednaF[i]; }
+            try { return forceCoordinate[i]; }
             catch(IndexOutOfRangeException) { return -1.0; }
         }
         public double getF(int i)
         {
-            try { return wartoscSily[i]; }
+            try { return forceValue[i]; }
             catch (IndexOutOfRangeException) { return 0.0; }
         }
         public double getMX(int i)
         {
-            try { return wspolrzednaM[i]; }
+            try { return momentCoordinate[i]; }
             catch (IndexOutOfRangeException) { return -1.0; }
         }
         public double getM(int i)
         {
-            try { return wartoscMomentu[i]; }
+            try { return momentValue[i]; }
             catch (IndexOutOfRangeException) { return 0.0; }
         }
 
-        //gettery tablic
-        public double[] getFX() { return wspolrzednaF; }
-        public double[] getF() { return wartoscSily; }
-        public double[] getMX() { return wspolrzednaM; }
-        public double[] getM() { return wartoscMomentu; }
+        //array getters
+        public double[] getFX() { return forceCoordinate; }
+        public double[] getF() { return forceValue; }
+        public double[] getMX() { return momentCoordinate; }
+        public double[] getM() { return momentValue; }
 
-        //pomcnicze funkcje
+        //subsidiary functions
         private double abs(double w)
         {
             return (w > 0) ? w : -w;
         }
         public void clear()
         {
-            czyscSily();
-            czyscMomenty();
+            forceClear();
+            momentClear();
         }
-        public void czyscSily()
+        public void forceClear()
         {
             double[] tmp;
 
             tmp = new double[1];
             tmp[0] = -1.0;
-            wspolrzednaF = tmp;
+            forceCoordinate = tmp;
 
             tmp = new double[1];
             tmp[0] = 0.0;
-            wartoscSily = tmp;
+            forceValue = tmp;
         }
-        public void czyscMomenty()
+        public void momentClear()
         {
             double[] tmp;
 
             tmp = new double[1];
             tmp[0] = -1.0;
-            wspolrzednaM = tmp;
+            momentCoordinate = tmp;
 
             tmp = new double[1];
             tmp[0] = 0.0;
-            wartoscMomentu = tmp;
+            momentValue = tmp;
         } 
-        public double getMaxPrzekrojowy(bool pionowe = false, bool momenty = false)
+        public double getMaxIntersectionMoment(bool vertical = false, bool moments = false)
         {
             double w = 1.0;
 
-            if(!momenty)
+            if(!moments)
             {
-                double[,] tmp = getSilyPrzekrojowe(pionowe);
+                double[,] tmp = getIntersectionForces(vertical);
 
                 for(int i = 0; i < tmp.Length / 3; i++)
                 {
@@ -100,7 +100,7 @@ namespace Informatyka
             }
             else
             {
-                double[,] tmp = getMomentyPrzekrojowe();
+                double[,] tmp = getIntersectionMoments();
 
                 for (int i = 0; i < tmp.Length / 3; i++)
                 {
@@ -120,11 +120,11 @@ namespace Informatyka
 
             return w;
         }
-        private double[] sortuj(double[] x, double[] y, bool drugaWartosc = false)
+        private double[] sort(double[] x, double[] y, bool secondValue = false)
         {
             int k = 0;
 
-            //sortowanie obu tablic od najmniejszego x
+            //sort both arrays from the lowest x coordinate
             for (int j = 0; j < x.Length - 1; j++)
             {
                 double min = x[j];
@@ -139,10 +139,10 @@ namespace Informatyka
                     }
                 }
 
-                //podmiana wartosci w tabeli x
+                //change values in coordinates array
                 x[k] = x[j];
                 x[j] = min;
-                //podmiana wartosci w tabeli f
+                //change values in forces array
                 min = y[k];
                 y[k] = y[j];
                 y[j] = min;
@@ -160,25 +160,25 @@ namespace Informatyka
                 }
             }
 
-            if (!drugaWartosc)
+            if (!secondValue)
                 return wx.ToArray();
             else
                 return wf.ToArray();
         }
-        private void setWartosci(string t1,string t2,bool momenty = false)
+        private void setValues(string t1,string t2,bool moments = false)
         {
-            //przecinki zamieniamy na kropki aby uniknąć błędów zapisu
+            //change commas to dots to prevent bugs
             t1 = t1.Replace(',', '.');
             t2 = t2.Replace(',', '.');
             t1 = t1.Replace(' ', '\n');
             t2 = t2.Replace(' ', '\n');
 
-            //pomocnicze listy wartości (dynamiczne tablice)
+            //subsidiary lists (dynamic arrays)
             List<double> x = new List<double>();
             List<double> f = new List<double>();
 
 
-            //Odczyt danych z textboxów
+            //get values from textboxes
             if (t1.Length > 0)
             {
 
@@ -188,7 +188,7 @@ namespace Informatyka
 
                 string tmp = "";
 
-                //wprowadzanie odleglosci
+                //distance input
                 for (int k = 0; k < t1.Length; k++)
                 {
                     if ((k>0 && t1[k] == ' '&& t1[k - 1]!=' ' && t1[k-1]!='\n') || (k>0 && t1[k] == '\n' && t1[k - 1] != ' ' && t1[k - 1] != '\n') || (k == t1.Length - 1))  //((t1[k] == ' ' && t1[k - 1] == ' ' && k > 0) || (t1[k] == '\n') || (k == t1.Length - 1))
@@ -200,7 +200,7 @@ namespace Informatyka
                         
                         if (Double.TryParse(tmp, NumberStyles.Any, numberFormat, out w))
                         {
-                            if ((w <= dlugosc) && (w >= 0))
+                            if ((w <= length) && (w >= 0))
                                 x.Add(w);
                             else
                                 x.Add(-1.0);
@@ -216,7 +216,7 @@ namespace Informatyka
 
                 tmp = "";
 
-                //wprowadzanie wartosci
+                //values input
                 for (int k = 0; k < t2.Length; k++)
                 {
                     if((k>0 && t2[k] == ' ' && t2[k - 1] != ' ' && t2[k - 1] != '\n') || (k>0 && t2[k] == '\n' && t2[k - 1] != ' ' && t2[k - 1] != '\n') || (k == t2.Length - 1))  //(((t1[k] == ' ') || (t1[k] == '\n') || (k == t1.Length - 1)) && t2[k - 1] != ' ' && t1[k - 1] != '\n' && k > 0)  //((t2[k] == ' '&& t2[k-1] == ' '&& k>0) || (t2[k] == '\n') || (k == t2.Length - 1)) // 
@@ -239,70 +239,70 @@ namespace Informatyka
             }
 
 
-            //Tablice muszą mieć jednakową długość a nasze wartosci potrzebują dwóch zmiennych
+            //both arrays must have the same size
             int I;
             I = (x.Count < f.Count) ? x.Count() :  f.Count();
             
-            double[] wspolrzedna = new double[I];
-            double[] wartosc = new double[I];
+            double[] coordinate = new double[I];
+            double[] value = new double[I];
             
 
-            //uzupelniamy tablice z siłami i odległościami           
+            //fills an array with coordinates and values          
              for (short i = 0; i < I; i++)
              {
                  if (f[i] != 0)
-                    wspolrzedna[i] = x[i];
+                    coordinate[i] = x[i];
                  else
-                     wspolrzedna[i] = -1.0;
+                     coordinate[i] = -1.0;
 
-                 wartosc[i] = f[i];
+                 value[i] = f[i];
             }
            
-            //sortowanie od najmniejszej odległości
-            if(!momenty)
+            //sort from the lowest x coordinate
+            if(!moments)
             {
-                wspolrzednaF = sortuj(wspolrzedna, wartosc);
-                wartoscSily = sortuj(wspolrzedna, wartosc, true);
+                forceCoordinate = sort(coordinate, value);
+                forceValue = sort(coordinate, value, true);
             }
             else
             {
-                wspolrzednaM = sortuj(wspolrzedna, wartosc);
-                wartoscMomentu = sortuj(wspolrzedna, wartosc, true);
+                momentCoordinate = sort(coordinate, value);
+                momentValue = sort(coordinate, value, true);
             }
 
         }
 
-        //Funkcje liczące reakcje
-        public double liczReakcje(bool utwierdzona,bool pionoweSily,bool drugaReakcja = false)
+        //reaction calculating function
+        public double reactionCalc(bool utwierdzona,bool areForcesVertical,bool secondReaction = false)
         {
-            double wartoscReakcji = 0.0;
+            double reactionValues = 0.0;
 
-            if (!pionoweSily)//poziome siły
+            if (!areForcesVertical)//horizontal forces
             {
                 //niezależnie czy belka jest podparta czy utwierdzona mamy jedną reakcję poziomą w lewej podporze
-                if (!drugaReakcja)
+                if (!secondReaction)
                 {
-                    for (int i = 0; i < wartoscSily.Length; i++)
-                        wartoscReakcji -= wartoscSily[i];
+                    for (int i = 0; i < forceValue.Length; i++)
+                        reactionValues -= forceValue[i];
                 }
             }
-            else //pionowe siły
+            else //vertical forces
             {
-                if (!drugaReakcja)
+                if (!secondReaction)
                 {
                     if(!utwierdzona)
                     {
                         //podparta lewa podpora (siła)
-                        for (int i = 0; i < wartoscSily.Length; i++)
-                            wartoscReakcji += wartoscSily[i];
+                        for (int i = 0; i < forceValue.Length; i++)
+                            reactionValues += forceValue[i];
 
-                        wartoscReakcji =  -liczReakcje(false, true, true) - wartoscReakcji;
+                        reactionValues =  -reactionCalc(false, true, true) - reactionValues;
                     }
                     else
                     {
                         //utwierdzona lewa podpora (siła)
-                        for (int i = 0; i < wartoscSily.Length; i++)
-                            wartoscReakcji -= wartoscSily[i];
+                        for (int i = 0; i < forceValue.Length; i++)
+                            reactionValues -= forceValue[i];
                     }
                 }
                 else
@@ -310,192 +310,192 @@ namespace Informatyka
                     if(!utwierdzona)
                     {
                         //podparta prawa podpora (siła)
-                        for (int i = 0; i < wartoscSily.Length; i++)
-                            wartoscReakcji -= wartoscSily[i] * ( wspolrzednaF[i]);
+                        for (int i = 0; i < forceValue.Length; i++)
+                            reactionValues -= forceValue[i] * ( forceCoordinate[i]);
 
-                        for (int i = 0; i < wartoscMomentu.Length; i++)
-                            wartoscReakcji += wartoscMomentu[i];
+                        for (int i = 0; i < momentValue.Length; i++)
+                            reactionValues += momentValue[i];
 
-                        wartoscReakcji = wartoscReakcji / dlugosc;
+                        reactionValues = reactionValues / length;
                     }
                     else
                     {
                         //utwierdzona lewa podpora (moment)
-                        for (int i = 0; i < wartoscMomentu.Length; i++)
-                            wartoscReakcji -= wartoscMomentu[i];
+                        for (int i = 0; i < momentValue.Length; i++)
+                            reactionValues -= momentValue[i];
 
-                        for (int i = 0; i < wartoscSily.Length; i++)
-                            wartoscReakcji -= wartoscSily[i] * (wspolrzednaF[i]);                 
+                        for (int i = 0; i < forceValue.Length; i++)
+                            reactionValues -= forceValue[i] * (forceCoordinate[i]);                 
                     }
                 }
             }
 
-            return wartoscReakcji;
+            return reactionValues;
         }
-        public void dodajReakcje(bool utwierdzona,bool pionowe)
+        public void reactionAdd(bool utwierdzona,bool vertical)
         {
             double[] tmp;
             
             if(!utwierdzona) //dla podpartej
             {
-                if(!pionowe)//pozioma reakcja
+                if(!vertical)//horizontal reaction
                 { 
-                    //dodajemy wartosc reakcji
-                    tmp = new double[wartoscSily.Length + 1];
-                    tmp[0] = liczReakcje(false, false);
+                    //add reaction value
+                    tmp = new double[forceValue.Length + 1];
+                    tmp[0] = reactionCalc(false, false);
 
                     for (int i = 1; i < tmp.Length; i++)
-                        tmp[i] = wartoscSily[i-1];      
+                        tmp[i] = forceValue[i-1];      
 
-                    wartoscSily = tmp;
+                    forceValue = tmp;
 
 
                     //dodajemy przylozenie
-                    tmp = new double[wspolrzednaF.Length + 1];
+                    tmp = new double[forceCoordinate.Length + 1];
                     tmp[0] = 0.0;
 
                     for (int i = 1; i < tmp.Length; i++)
-                        tmp[i] = wspolrzednaF[i-1];
+                        tmp[i] = forceCoordinate[i-1];
 
-                    wspolrzednaF = tmp;
+                    forceCoordinate = tmp;
                 }
-                else//pionowa reakcja
+                else//vertical reaction
                 {
-                    if(wartoscSily[0] != -1.0)
+                    if(forceValue[0] != -1.0)
                     {
-                        //dodajemy wartosc reakcji,
-                        tmp = new double[wartoscSily.Length + 2];
-                        tmp[0] = liczReakcje(false,true);
+                        //put in reaction value
+                        tmp = new double[forceValue.Length + 2];
+                        tmp[0] = reactionCalc(false,true);
 
                         for (int i = 1; i < tmp.Length-1; i++)
-                            tmp[i] = wartoscSily[i-1];
+                            tmp[i] = forceValue[i-1];
 
-                        tmp[tmp.Length-1] = liczReakcje(false,true,true);
+                        tmp[tmp.Length-1] = reactionCalc(false,true,true);
 
-                        wartoscSily = tmp;
+                        forceValue = tmp;
                     
 
                         //dodajemy przylozenie
-                        tmp = new double[wspolrzednaF.Length + 2];
+                        tmp = new double[forceCoordinate.Length + 2];
                         tmp[0] = 0.0;
 
                         for (int i = 1; i < tmp.Length-1; i++)
-                            tmp[i] = wspolrzednaF[i-1];
+                            tmp[i] = forceCoordinate[i-1];
 
-                        tmp[tmp.Length - 1] = dlugosc;
+                        tmp[tmp.Length - 1] = length;
 
-                        wspolrzednaF = tmp; 
+                        forceCoordinate = tmp; 
                     }
                     else
                     {
                         tmp = new double[2];
-                        tmp[0] = liczReakcje(false, true);
-                        tmp[1] = liczReakcje(false, true, true);
-                        wartoscSily = tmp;
+                        tmp[0] = reactionCalc(false, true);
+                        tmp[1] = reactionCalc(false, true, true);
+                        forceValue = tmp;
 
                         tmp = new double[2];
                         tmp[0] = 0.0;
-                        tmp[1] = dlugosc;
-                        wspolrzednaF = tmp;
+                        tmp[1] = length;
+                        forceCoordinate = tmp;
                     }                     
                 }
                 
             }
             else //utwierdzona
             {
-                if (!pionowe)//pozioma reakcja
+                if (!vertical)//horizontal reaction
                 {
-                    //dodajemy wartosc reakcji
-                    tmp = new double[wartoscSily.Length + 1];
-                    tmp[0] = liczReakcje(true,false);
+                    //put in reaction value
+                    tmp = new double[forceValue.Length + 1];
+                    tmp[0] = reactionCalc(true,false);
 
                     for (int i = 1; i < tmp.Length; i++)
-                        tmp[i] = wartoscSily[i-1];
+                        tmp[i] = forceValue[i-1];
 
-                    wartoscSily = tmp;
+                    forceValue = tmp;
 
 
                     //dodajemy przylozenie
-                    tmp = new double[wspolrzednaF.Length + 1];
+                    tmp = new double[forceCoordinate.Length + 1];
                     tmp[0] = 0.0;
 
                     for (int i = 1; i < tmp.Length; i++)
-                        tmp[i] = wspolrzednaF[i-1];
+                        tmp[i] = forceCoordinate[i-1];
 
-                    wspolrzednaF = tmp;
+                    forceCoordinate = tmp;
                 }
-                else//pionowa reakcja
+                else//vertical reaction
                 {
-                    if(wartoscMomentu[0] != -1.0)
+                    if(momentValue[0] != -1.0)
                     {
-                        //dodajemy wartosc reakcji
-                        tmp = new double[wartoscSily.Length + 1];
-                        tmp[0] = liczReakcje(true, true);
+                        //add reaction value
+                        tmp = new double[forceValue.Length + 1];
+                        tmp[0] = reactionCalc(true, true);
 
                         for (int i = 1; i < tmp.Length; i++)
-                            tmp[i] = wartoscSily[i - 1];
+                            tmp[i] = forceValue[i - 1];
 
-                        wartoscSily = tmp;
+                        forceValue = tmp;
 
 
                         //dodajemy przylozenie
-                        tmp = new double[wspolrzednaF.Length + 1];
+                        tmp = new double[forceCoordinate.Length + 1];
                         tmp[0] = 0.0;
 
                         for (int i = 1; i < tmp.Length; i++)
-                            tmp[i] = wspolrzednaF[i - 1];
+                            tmp[i] = forceCoordinate[i - 1];
 
-                        wspolrzednaF = tmp;
+                        forceCoordinate = tmp;
 
 
-                        //dodajemy wartosc momentu reakcji
-                        tmp = new double[wartoscMomentu.Length + 1];
-                        tmp[0] = liczReakcje(true, true, true);
+                        //add reaction moment value
+                        tmp = new double[momentValue.Length + 1];
+                        tmp[0] = reactionCalc(true, true, true);
 
                         for (int i = 1; i < tmp.Length; i++)
-                            tmp[i] = wartoscMomentu[i - 1];
+                            tmp[i] = momentValue[i - 1];
 
-                        wartoscMomentu = tmp;
+                        momentValue = tmp;
 
 
                         //dodajemy przylozenie momentu
-                        tmp = new double[wspolrzednaM.Length + 1];
+                        tmp = new double[momentCoordinate.Length + 1];
                         tmp[0] = 0.0;
 
                         for (int i = 1; i < tmp.Length; i++)
-                            tmp[i] = wspolrzednaM[i - 1];
+                            tmp[i] = momentCoordinate[i - 1];
 
-                        wspolrzednaM = tmp;
+                        momentCoordinate = tmp;
                     }
                     else
                     {
                         tmp = new double[1];
-                        tmp[0] = liczReakcje(true, true);
-                        wartoscSily = tmp;
+                        tmp[0] = reactionCalc(true, true);
+                        forceValue = tmp;
 
                         tmp = new double[1];
                         tmp[0] = 0.0;
-                        wspolrzednaF = tmp;
+                        forceCoordinate = tmp;
 
                         tmp = new double[1];
-                        tmp[0] = liczReakcje(true, true, true);
-                        wartoscMomentu = tmp;
+                        tmp[0] = reactionCalc(true, true, true);
+                        momentValue = tmp;
 
                         tmp = new double[1];
                         tmp[0] = 0.0;
-                        wspolrzednaM = tmp;
+                        momentCoordinate = tmp;
                     }
                 }
             }
            
         }
 
-        //Funkcje zwracające wartości przekrojowe wpostaci tablic (wspolrzedna,wartość prawy,wartość lewy)
-        public double[,] poszerz()
+        //functions that return intersection values by arrays - they have 3 columns (coordinate, right side value, left side value)
+        public double[,] extend()
         {
           
-            double[,] f = redukuj();
-            double[,] m = redukuj(wspolrzednaM,wartoscMomentu);
+            double[,] f = reduce();
+            double[,] m = reduce(momentCoordinate,momentValue);
 
             int k = 0;
 
@@ -503,7 +503,7 @@ namespace Informatyka
             List<double> F = new List<double>();
             List<double> M = new List<double>();
 
-            //Przepisujemy tablice do list
+            //rewrite arrays to lists
             for (int i = 0;i < (m.Length / 2); i++)
             {
                 X.Add(m[0, i]);
@@ -518,7 +518,7 @@ namespace Informatyka
                 M.Add(0.0);
             }
 
-            //sortowanie obu tablic od najmniejszego x
+            //sort both arrays from the lowest x coordinate
             for (int j = 0; j < X.Count() - 1; j++)
             {
                 double min = X[j];
@@ -533,20 +533,20 @@ namespace Informatyka
                     }
                 }
 
-                //podmiana wartosci w tabeli X
+                //change values of X array
                 X[k] = X[j];
                 X[j] = min;
-                //podmiana wartosci w tabelach F 
+                //change values of F array
                 min = F[k];
                 F[k] = F[j];
                 F[j] = min;
-                //podmiana wartosci w tabelach M
+                //change values of M array
                 min = M[k];
                 M[k] = M[j];
                 M[j] = min;
             }
 
-            //redukcja (jeśli odległości są takie same to suma wartości dwóch sąsiednich jest zapisana jako poprzedni element)
+            // reduce array size - if two or more values have the same 'x coordinate', then sum them and put as a one force
             for (int j = X.Count() - 1; j > 0; j--)
             {
                 if (X[j - 1] == X[j])
@@ -566,7 +566,7 @@ namespace Informatyka
             double[,] tmp = new double[3, k];
             k = 0;
 
-            //umieszczamy to do wynikowej tablicy
+            //putting everything to the final array
             for (int i = 0; i < X.Count(); i++)
             {
                 if (X[i] >= 0.0)
@@ -579,7 +579,7 @@ namespace Informatyka
             }
 
 
-            //program dodaje jakieś zera niewiadomo skąd na końcu ten mechanizm je eliminuje
+            //bugfix - prevent from adding zeros at the end of the array
             k = 0;
 
             for(int i =  tmp.Length / 3 - 1; i>=0;i-- )
@@ -592,30 +592,30 @@ namespace Informatyka
             
             if(k>0)
             {
-                double[,] skracanie = new double[3, tmp.Length / 3 - k];
+                double[,] reducing = new double[3, tmp.Length / 3 - k];
 
-                for (int j = 0; j < skracanie.Length/3; j++)
+                for (int j = 0; j < reducing.Length/3; j++)
                 {
-                    skracanie[0, j] = tmp[0, j];
-                    skracanie[1, j] = tmp[1, j];
-                    skracanie[2, j] = tmp[2, j];
+                    reducing[0, j] = tmp[0, j];
+                    reducing[1, j] = tmp[1, j];
+                    reducing[2, j] = tmp[2, j];
                 }
 
-                tmp = skracanie;
+                tmp = reducing;
             }
 
 
             return tmp;
         }
-        private double[,] redukuj()
+        private double[,] reduce()
         {
-            return redukuj(wspolrzednaF, wartoscSily);
+            return reduce(forceCoordinate, forceValue);
         }
-        public double[,] redukuj(double[] x, double[] y)
+        public double[,] reduce(double[] x, double[] y)
         {
             int k = 1;
 
-            //redukcja (jeśli odległości są takie same to suma wartości dwóch sąsiednich jest zapisana jako poprzedni element)
+            //reduce array size - if two or more values have the same 'x coordinate', then sum them and put as a one force
             for (int j = x.Length - 1; j > 0; j--)
             {
                 if (x[j - 1] == x[j])
@@ -631,7 +631,7 @@ namespace Informatyka
             double[,] tmp = new double[2, k];
             k = 0;
 
-            //umieszczamy to do wynikowej tablicy
+            //putting everything to the final array
             for (int i = 0; i < x.Length; i++)
             {
                 if (x[i] >= 0.0)
@@ -643,7 +643,7 @@ namespace Informatyka
             }
 
             
-            //program dodaje jakieś zera niewiadomo skąd na końcu ten mechanizm je eliminuje
+            //bugfix - prevent from adding zeros at the end of the array
             k = 0;
 
             for (int i = tmp.Length / 2 - 1; i >= 0; i--)
@@ -656,34 +656,34 @@ namespace Informatyka
 
             if (k > 0)
             {
-                double[,] skracanie = new double[2, tmp.Length / 2 - k];
+                double[,] reducing = new double[2, tmp.Length / 2 - k];
 
-                for (int j = 0; j < skracanie.Length / 2; j++)
+                for (int j = 0; j < reducing.Length / 2; j++)
                 {
-                    skracanie[0, j] = tmp[0, j];
-                    skracanie[1, j] = tmp[1, j];
+                    reducing[0, j] = tmp[0, j];
+                    reducing[1, j] = tmp[1, j];
                 }
 
-                tmp = skracanie;
+                tmp = reducing;
             }
 
             return tmp;
         }
-        public double[,] getSilyPrzekrojowe(bool pionowe = false)
+        public double[,] getIntersectionForces(bool vertical = false)
         {
             
-            double[,] tmp = redukuj();
+            double[,] tmp = reduce();
             double[,] result;
 
             if (tmp.Length != 0)
             {
                 
-                double suma;
+                double sum;
                 int start = 0;
 
                 //ostatni punkt przekroju jest w długości belki i należy go dodać jeżeli nie ma tam przyłożonych żadnych sił ani momentów 
                 //to samo tyczy pierwszego punktu przekroju
-                if (tmp[0, tmp.Length / 2 - 1] < dlugosc)
+                if (tmp[0, tmp.Length / 2 - 1] < length)
                 {
                     if (tmp[0, 0] == 0.0)
                         result = new double[3, tmp.Length / 2 + 1];
@@ -696,7 +696,7 @@ namespace Informatyka
                         start = 1;
                     }
 
-                    result[0, (result.Length / 3) - 1] = dlugosc;
+                    result[0, (result.Length / 3) - 1] = length;
                     result[1, (result.Length / 3) - 1] = 0.0;
                     result[2, (result.Length / 3) - 1] = 0.0;
                 }
@@ -715,55 +715,55 @@ namespace Informatyka
                 }
 
 
-                //brzeg lewy (X|L|P)
+                //left side (X|L|R)
                 result[0, start] = tmp[0, 0];
                 result[1, start] = 0.0;
 
-                suma = 0.0;
+                sum = 0.0;
                 for (int j = 1; j < tmp.Length / 2; j++)
-                    suma += tmp[1, j];
-                if (!pionowe)
-                    result[2, start] = suma;
+                    sum += tmp[1, j];
+                if (!vertical)
+                    result[2, start] = sum;
                 else
-                    result[2, start] = -suma;
+                    result[2, start] = -sum;
 
 
-                //brzeg prawy (X|L|P)
+                //right side (X|L|R)
                 result[0, tmp.Length / 2 - 1] = tmp[0, tmp.Length / 2 - 1];
                 result[2, tmp.Length / 2 - 1] = 0.0;
 
-                suma = 0.0;
+                sum = 0.0;
                 for (int j = 0; j < tmp.Length / 2 - 1; j++)
-                    suma -= tmp[1, j];
-                if (!pionowe)
-                    result[1, tmp.Length / 2 - 1] = suma;
+                    sum -= tmp[1, j];
+                if (!vertical)
+                    result[1, tmp.Length / 2 - 1] = sum;
                 else
-                    result[1, tmp.Length / 2 - 1] = -suma;
+                    result[1, tmp.Length / 2 - 1] = -sum;
 
 
 
                 for (int i = start + 1; i < tmp.Length / 2 - 1; i++)
                 {
-                    //odległości
+                    // X coordinates
                     result[0, i] = tmp[0, i];
 
-                    //lewy przekrój myslowy wartośći
-                    suma = 0.0;
+                    //left side of virtual value intersection
+                    sum = 0.0;
                     for (int j = 0; j < i; j++)
-                        suma -= tmp[1, j];
-                    if (!pionowe)
-                        result[1, i] = suma;//poziome
+                        sum -= tmp[1, j];
+                    if (!vertical)
+                        result[1, i] = sum;//horizontal
                     else
-                        result[1, i] = -suma;//pionowe
+                        result[1, i] = -sum;//vertical
 
-                    //prawy przekrój myslowy wartosći
-                    suma = 0.0;
+                    //right side of virtual value intersection
+                    sum = 0.0;
                     for (int j = i + 1; j < tmp.Length / 2; j++)
-                        suma += tmp[1, j];
-                    if (!pionowe)
-                        result[2, i] = suma;
+                        sum += tmp[1, j];
+                    if (!vertical)
+                        result[2, i] = sum;
                     else
-                        result[2, i] = -suma;
+                        result[2, i] = -sum;
 
                 }
             }
@@ -777,19 +777,19 @@ namespace Informatyka
             }
             return result;
         }
-        public double[,] getMomentyPrzekrojowe()
+        public double[,] getIntersectionMoments()
         {
 
-            double[,] tmp = poszerz();
+            double[,] tmp = extend();
             double[,] result;
-            double suma;
+            double sum;
             int start = 0;
 
             //ostatni punkt przekroju jest w długości belki i należy go dodać jeżeli nie ma tam przyłożonych żadnych sił ani momentów 
             //to samo tyczy pierwszego punktu przekroju
             try
             {
-                if (tmp[0, tmp.Length / 3 - 1] < dlugosc)
+                if (tmp[0, tmp.Length / 3 - 1] < length)
                 {
                     if (tmp[0, 0] == 0.0)
                         result = new double[3, tmp.Length / 3 + 1];
@@ -802,7 +802,7 @@ namespace Informatyka
                         start = 1;
                     }
 
-                    result[0, (result.Length / 3) - 1] = dlugosc;
+                    result[0, (result.Length / 3) - 1] = length;
                     result[1, (result.Length / 3) - 1] = 0.0;
                     result[2, (result.Length / 3) - 1] = 0.0;
                 }
@@ -821,56 +821,56 @@ namespace Informatyka
                 }
 
 
-                //brzeg lewy (X|L|P)
+                //left side (X|L|R)
                 result[0, start] = tmp[0, 0];
                 result[1, start] = 0.0;
 
-                suma = 0.0;
+                sum = 0.0;
                 for (int j = 1; j < tmp.Length / 3; j++)
-                    suma -= tmp[1, j] * (tmp[0, j]);
+                    sum -= tmp[1, j] * (tmp[0, j]);
                 for (int j = 1; j < tmp.Length / 3; j++)
-                    suma += tmp[2, j];
+                    sum += tmp[2, j];
 
-                result[2, start] = suma;
+                result[2, start] = sum;
 
 
-                //brzeg prawy (X|L|P)
+                //right side (X|L|R)
                 result[0, result.Length / 3 - 1] = tmp[0, tmp.Length / 3 - 1];
                 result[2, result.Length / 3 - 1] = 0.0;
 
-                suma = 0.0;
+                sum = 0.0;
                 for (int j = 0; j < tmp.Length / 3 - 1; j++)
-                    suma += tmp[1, j] * (dlugosc - tmp[0, j]);
+                    sum += tmp[1, j] * (length - tmp[0, j]);
                 for (int j = 1; j < tmp.Length / 3; j++)
-                    suma += tmp[2, j];
+                    sum += tmp[2, j];
 
-                result[1, result.Length / 3 - 1] = suma;
+                result[1, result.Length / 3 - 1] = sum;
 
 
                 for (int i = 1; i < tmp.Length / 3; i++)
                 {
-                    //odległości
+                    //distance
                     result[0, i] = tmp[0, i];
 
-                    //lewy przekrój myslowy wartośći
-                    suma = 0.0;
+                    //left side of virtual value intersection
+                    sum = 0.0;
 
                     for (int j = 0; j < i; j++)
-                        suma += tmp[1, j] * (tmp[0, i] - tmp[0, j]);
+                        sum += tmp[1, j] * (tmp[0, i] - tmp[0, j]);
                     for (int j = 0; j < i; j++)
-                        suma += tmp[2, j];
+                        sum += tmp[2, j];
 
-                    result[1, i] = suma;
+                    result[1, i] = sum;
 
-                    //prawy przekrój myslowy wartosći
-                    suma = 0.0;
+                    //right side of virtual value intersection
+                    sum = 0.0;
 
                     for (int j = i; j < tmp.Length / 3; j++)
-                        suma -= tmp[1, j] * (tmp[0, j] - tmp[0, i]);
+                        sum -= tmp[1, j] * (tmp[0, j] - tmp[0, i]);
                     for (int j = i; j < tmp.Length / 3; j++)
-                        suma += tmp[2, j];
+                        sum += tmp[2, j];
 
-                    result[2, i] = suma;
+                    result[2, i] = sum;
                 }
             }
             catch(IndexOutOfRangeException)
@@ -886,21 +886,21 @@ namespace Informatyka
             return result;
         }
 
-        //ustawianie wartosci sil/momentow
+        //setting forces/moments values
         public void setF(string t1, string t2)
         {
-                setWartosci(t1, t2);
+                setValues(t1, t2);
         }
         public void setM(string t1, string t2)
         {
-                setWartosci(t1, t2, true);
+                setValues(t1, t2, true);
         }
 
-        //konstruktor klasy
+        //class constructor
         public XFM()
         {
             clear();
-            setDlugosc(100.0);
+            setLength(100.0);
         }   
     }
 }

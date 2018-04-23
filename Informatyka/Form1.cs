@@ -8,24 +8,24 @@ namespace Informatyka
 {
     public partial class Form1 : Form
     {
-        private double dlugosc = 100;
+        private double length = 100;
         private XFM O = new XFM();
         private PictureBox pictureBox1 = new PictureBox();
         private PictureBox pictureBox2 = new PictureBox();
-        private PictureBox WykresyBox = new PictureBox();
+        private PictureBox plotBox = new PictureBox();
 
-        //buttony
+        //buttons
         private void button1_Click(object sender, EventArgs e)
         {
-            //wprowadzamy wartosci 
-            wprowadzWartosci();
+            //Values input
+            valueInput();
 
-            //wypisyawnie reakcji
+            //Reactions output
             if (textBox1.Text.Length > 0 || textBox5.Text.Length > 0)
-                PrezentujReakcje(wsuw.Checked, pionowe.Checked);
+                showReaction(wsuw.Checked, vertical.Checked);
 
-            //rysowanie sił na wykresie
-            WlaczRysowanie();
+            //drawing forces on pictureBox
+            turnPaintingOn();
         }
         private void button3_Click(object sender, EventArgs e)
         {
@@ -36,10 +36,10 @@ namespace Informatyka
 
             O.clear();
 
-            label4.Text = "Spis reakcji:";
+            reactions_list.Text = "Reaction list:";
 
-            WlaczRysowanie();
-            RysujPusteWykresy();
+            turnPaintingOn();
+            drawEmptyPlots();
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -54,85 +54,85 @@ namespace Informatyka
                 label4.Text+= O.getMX(i).ToString() + "|" + O.getM(i).ToString() + "\n";
             */
 
-            label4.Text = "Spis reakcji";
+            reactions_list.Text = "Reaction list";
 
             if (((textBox1.Text.Length > 0 && textBox2.Text.Length > 0) || (textBox4.Text.Length > 0 && textBox5.Text.Length > 0)) &&( O.getFX(0)!=-1.0|| O.getMX(0) != -1.0))
             {
-                if (!pionowe.Checked)
+                if (!vertical.Checked)
                 {
                     /*
                     label4.Text += "Poredukowane\n";
-                    for (int i = 0; i < O.redukuj(O.getFX(), O.getF()).Length / 2; i++)
-                        label4.Text += O.redukuj(O.getFX(), O.getF())[0, i].ToString() + "|" + O.redukuj(O.getFX(), O.getF())[1, i].ToString() + "\n";
+                    for (int i = 0; i < O.reduce(O.getFX(), O.getF()).Length / 2; i++)
+                        label4.Text += O.reduce(O.getFX(), O.getF())[0, i].ToString() + "|" + O.reduce(O.getFX(), O.getF())[1, i].ToString() + "\n";
                      */
 
-                    label4.Text += "\nPrzekrojowe siły poziome X|L|P\n";
-                    for (int i = 0; i < O.getSilyPrzekrojowe().Length / 3; i++)
-                        label4.Text += "Odległość:" + O.getSilyPrzekrojowe()[0, i].ToString() + " [m] |  " + O.getSilyPrzekrojowe()[1, i].ToString() + "[N] Lewa strona|  " + O.getSilyPrzekrojowe()[2, i].ToString() + "[N] Prawa strona\n";
+                    reactions_list.Text += "\nPrzekrojowe siły poziome X|L|P\n";
+                    for (int i = 0; i < O.getIntersectionForces().Length / 3; i++)
+                        reactions_list.Text += "Distance:" + O.getIntersectionForces()[0, i].ToString() + " [m] |  " + O.getIntersectionForces()[1, i].ToString() + "[N] Left side|  " + O.getIntersectionForces()[2, i].ToString() + "[N] Right side\n";
                 }
                 else
                 {
                     /*
                     label4.Text += "Poredukowane MOMENTY\n";
-                    for (int i = 0; i < O.redukuj(O.getMX(),O.getM()).Length / 2; i++)
-                        label4.Text += O.redukuj(O.getMX(), O.getM())[0, i].ToString() + "|" + O.redukuj(O.getMX(), O.getM())[1, i].ToString() + "\n";
+                    for (int i = 0; i < O.reduce(O.getMX(),O.getM()).Length / 2; i++)
+                        label4.Text += O.reduce(O.getMX(), O.getM())[0, i].ToString() + "|" + O.reduce(O.getMX(), O.getM())[1, i].ToString() + "\n";
 
                     label4.Text += "Poszerzone\n";
                     for (int i = 0; i < O.poszerz().Length / 3; i++)
                         label4.Text += O.poszerz()[0, i].ToString() + "|" + O.poszerz()[1, i].ToString() + "|" + O.poszerz()[2, i].ToString() + "\n";
                     */
 
-                    label4.Text += "Maksyymalna siła przekrojowa: " + O.getMaxPrzekrojowy(true, false) + "\n";
-                    label4.Text += "Maksymalny moment przekrojowy: " + O.getMaxPrzekrojowy(true, true) + "\n";
-                    label4.Text += "Przekrojowe pionowe (siły) X|L|P\n";
+                    reactions_list.Text += "Maximun intersection force: " + O.getMaxIntersectionMoment(true, false) + "\n";
+                    reactions_list.Text += "Maximum intersection moment: " + O.getMaxIntersectionMoment(true, true) + "\n";
+                    reactions_list.Text += "Vertical intersection forces: X|L|P\n";
 
-                    for (int i = 0; i < O.getSilyPrzekrojowe(true).Length / 3; i++)
-                        label4.Text += "Odległość:" + O.getSilyPrzekrojowe()[0, i].ToString() + " [m] |  " + O.getSilyPrzekrojowe()[1, i].ToString() + "[N] Lewa strona|  " + O.getSilyPrzekrojowe()[2, i].ToString() + "[N] Prawa strona\n";
+                    for (int i = 0; i < O.getIntersectionForces(true).Length / 3; i++)
+                        reactions_list.Text += "Distance:" + O.getIntersectionForces()[0, i].ToString() + " [m] |  " + O.getIntersectionForces()[1, i].ToString() + "[N] Left side|  " + O.getIntersectionForces()[2, i].ToString() + "[N] Right side\n";
 
-                    label4.Text += "Przekrojowe pionowe (momenty) X|L|P\n";
-                    for (int i = 0; i < O.getMomentyPrzekrojowe().Length / 3; i++)
-                        label4.Text += O.getMomentyPrzekrojowe()[0, i].ToString() + " [m]  |" + O.getMomentyPrzekrojowe()[1, i].ToString() + "[Nm] Lewa strona|  " + O.getMomentyPrzekrojowe()[2, i].ToString() + "[Nm] Prawa strona\n";
+                    reactions_list.Text += "Vertical intersection moments: X|L|P\n";
+                    for (int i = 0; i < O.getIntersectionMoments().Length / 3; i++)
+                        reactions_list.Text += O.getIntersectionMoments()[0, i].ToString() + " [m]  |" + O.getIntersectionMoments()[1, i].ToString() + "[Nm] Left side|  " + O.getIntersectionMoments()[2, i].ToString() + "[Nm] Right side\n";
                 }
 
-                WlaczWykresy();
+                turnPlotsOn();
             }       
         }
 
-        //pomocnicze
-        private void PrezentujReakcje(bool utwierdzona,bool pionowe)
+        //subsidiary function
+        private void showReaction(bool utwierdzona,bool vertical)
         {
-        //prezentowanie reakcji
+        //reactions presentation
         if (!utwierdzona)//radioButton2ta
         {
-                if (!pionowe) //poziome
-                    label4.Text = "Spis reakcji:\nReakcja pozioma w lewej podporze ma wartość: " + O.getF(0) + "[N]\nBrak reakcji w prawej podporze";
-            else //pionowe
-                label4.Text = "Spis reakcji:\nReakcja pionowa w lewej podporze ma wartość: " + O.getF(0) + "[N]\nReakcja pionowa w prawej podporze ma wartość: " + O.getF(O.getF().Length - 1) + "[N]";
+                if (!vertical) //horizontal
+                    reactions_list.Text = "Reaction list:\nHorizontal reaction on the left support: " + O.getF(0) + "[N]\nNo reaction on the right support";
+            else //vertical
+                reactions_list.Text = "Reaction list:\nVertical reaction on the left support: " + O.getF(0) + "[N]\nVertical reaction on the right support: " + O.getF(O.getF().Length - 1) + "[N]";
         }
         else //utwierdzona
         {
-            if (!pionowe) //poziome
-                label4.Text = "Spis reakcji:\nReakcja pozioma w lewej podporze ma wartość: " + O.getF(0) + "[N]\nBrak reakcji w prawej podporze";
-            else //pionowe
-                label4.Text = "Spis reakcji:\nReakcja pionowa w lewej podporze ma wartość: " + O.getF(0) + "[N]\nMoment umocnienia w lewej podporze ma wartość: " + O.getM(0) + "[Nm]";
+            if (!vertical) //horizontal
+                reactions_list.Text = "Reaction list:\nHorizontal reaction on the left support: " + O.getF(0) + "[N]\nNo reaction on the right support";
+            else //vertical
+                reactions_list.Text = "Reaction list:\nVertical reaction on the left support: " + O.getF(0) + "[N]\nMoment umocnienia w lewej podporze ma wartość: " + O.getM(0) + "[Nm]";
         }
     }
-        private void wprowadzWartosci()
+        private void valueInput()
         {
-            //Sprzątamy stare wartości
+            //clearing the 'old' values
             O.clear();
 
-            //wprowadzamy Siły
+            //force input
             if (textBox1.Text.Length > 0 && textBox2.Text.Length > 0)
                 O.setF(textBox1.Text, textBox2.Text);
             else
-                O.czyscSily();
+                O.forceClear();
 
-            //czyścimy textboxy by wypełnić je tylko prawidłowymi wartościami
+            //clearing textboxes so that we can fill them again with the right values
             textBox1.Clear();
             textBox2.Clear();
 
-            //ponownie wypełniamy textboxy istniejacymi siłamy
+            //filling with the right values
             for (int i = 0; i < O.getFX().Count(); i++)
             {
                 if(O.getF(i)!=0)
@@ -142,19 +142,20 @@ namespace Informatyka
                 }
             }
 
-            //Wprowadzamy momenty jeśli występują
-            if (pionowe.Checked && textBox4.Text.Length > 0 && textBox5.Text.Length > 0)
+            //we put in moments (if they exist)
+            if (vertical.Checked && textBox4.Text.Length > 0 && textBox5.Text.Length > 0)
                 O.setM(textBox5.Text, textBox4.Text);
             else
-                O.czyscMomenty();
+                O.momentClear();
 
-            //czyścimy textboxy by wypełnić je tylko prawidłowymi wartościami
-            if (pionowe.Checked)
+
+            //clearing textboxes so that we can fill them again with the right values
+            if (vertical.Checked)
             {
                 textBox5.Clear();
                 textBox4.Clear();
 
-                //ponownie wypełniamy textboxy istniejacymi momentami
+                //filling with the right values
                 for (int i = 0; i < O.getMX().Count(); i++)
                 {
                     if(O.getM(i)!=0)
@@ -165,24 +166,23 @@ namespace Informatyka
                 }
             }
 
-            //dodawanie reakcji do tablic wartości
+            //adding reactions to value arrays
             if (textBox1.Text.Length > 0 || textBox5.Text.Length > 0)
-                O.dodajReakcje(wsuw.Checked, pionowe.Checked);
+                O.reactionAdd(wsuw.Checked, vertical.Checked);
         }
 
-        //rysowanie
-        private void RysujPusteWykresy()
+        //drawing
+        private void drawEmptyPlots()
         {
-            WykresyBox.Location = new Point(520, 260);
-            WykresyBox.Size = new Size(500, 300);
-            WykresyBox.BackColor = Color.LightBlue;
-            WykresyBox.Visible = true;
-       //     WykresyBox.Parent = pictureBox2;
-            Controls.Add(WykresyBox);
+            plotBox.Location = new Point(520, 260);
+            plotBox.Size = new Size(500, 300);
+            plotBox.BackColor = Color.LightBlue;
+            plotBox.Visible = true;
+            Controls.Add(plotBox);
 
-            WykresyBox.Paint += new System.Windows.Forms.PaintEventHandler(RysujOsie);
+            plotBox.Paint += new System.Windows.Forms.PaintEventHandler(drawAxes);
         }
-        private void WlaczRysowanie()
+        private void turnPaintingOn()
         {
 
             pictureBox1.Location = new Point(520, 35);
@@ -196,22 +196,23 @@ namespace Informatyka
             if (podpar.Checked)
             {
                 pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujBelkePodparta);
-                pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujSily);
-                if (pionowe.Checked)
-                    pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujMomenty);
+                pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(drawForces);
+                if (vertical.Checked)
+                    pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(drawMoments);
             }
             if (wsuw.Checked)
             {
                 pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujBelkeUtwierdzona);
-                pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujSily);
-                if (pionowe.Checked)
-                    pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(RysujMomenty);
+                pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(drawForces);
+                if (vertical.Checked)
+                    pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(drawMoments);
             }
         }
-        private void RysujSily(object sender, PaintEventArgs e)
+        private void drawForces(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             //rysowanie sily w punkcie o odleglej od poczatku belki od fx
+            //drawing a force in a point
 
             if (textBox1.Text.Length > 0 && O.getF().Length == O.getFX().Length)
             {
@@ -220,9 +221,9 @@ namespace Informatyka
 
                 for (int a = 0; a < O.getFX().Length; a++)
                 {
-                    int fx = Convert.ToInt32(O.getFX(a) * 340.0 / dlugosc) + 30;
+                    int fx = Convert.ToInt32(O.getFX(a) * 340.0 / length) + 30;
 
-                    if ((poziome.Checked && a == 0) || (pionowe.Checked && (a == 0 || (a == O.getFX().Length - 1 && !wsuw.Checked))))//Wyróżnianie poziomych reakcji  &&  wyróżnienie pionowych reakcji
+                    if ((horizontal.Checked && a == 0) || (vertical.Checked && (a == 0 || (a == O.getFX().Length - 1 && !wsuw.Checked))))//Wyróżnianie poziomych reakcji  &&  wyróżnienie pionowych reakcji
                     {
                         kolor = Color.Red;
                         znak = "R";
@@ -236,9 +237,9 @@ namespace Informatyka
 
                     if (fx >= 30)
                     {
-                        if (O.getF(a) > 0)//silu dodatnie
+                        if (O.getF(a) > 0)//positive Forces
                         {
-                            if (pionowe.Checked)//sila pionowa dodatnia
+                            if (vertical.Checked)//vertical positive force
                             {
                                 g.FillRectangle(new SolidBrush(kolor), fx - 4, 115, 8, 60);
 
@@ -248,7 +249,7 @@ namespace Informatyka
                                 g.DrawString(znak + a, new Font("ArialBold", 8), new SolidBrush(Color.Black), fx - 5, 175 + 10 * (a % 5));
                             }
 
-                            if (poziome.Checked)//sila pozioma dodatnia
+                            if (horizontal.Checked)//horizontal positive force
                             {
                                 g.FillRectangle(new SolidBrush(kolor), fx - 65, 96, 60, 8);
 
@@ -261,7 +262,7 @@ namespace Informatyka
 
                         if (O.getF(a) < 0)
                         {
-                            if (pionowe.Checked)//sila pionowa ujemna
+                            if (vertical.Checked)//vertical negative force
                             {
                                 g.FillRectangle(new SolidBrush(kolor), fx - 4, 30, 8, 60);
 
@@ -271,7 +272,7 @@ namespace Informatyka
                                 g.DrawString(znak + (a), new Font("ArialBold", 8), new SolidBrush(Color.Black), fx - 5, 15 - 10 * (a % 5));
                             }
 
-                            if (poziome.Checked)//sila pozioma ujemna
+                            if (horizontal.Checked)//horizontal negative force
                             {
                                 g.FillRectangle(new SolidBrush(kolor), fx + 5, 96, 60, 8);
 
@@ -286,53 +287,54 @@ namespace Informatyka
                 }
             }
         }
-        private void RysujMomenty(object sender, PaintEventArgs e)
+        private void drawMoments(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
             //rysowanie sily w punkcie o odleglej od poczatku belki od fx
+            //drawing force at point
             if (textBox5.Text.Length > 0 && O.getM().Length == O.getMX().Length)
             {
-                Color kolor = new Color();
+                Color color = new Color();
                 string znak;
 
                 for (int a = 0; a < O.getMX().Length; a++)
                 {
-                    int fx = Convert.ToInt32(O.getMX(a) * 340.0 / dlugosc) + 30;
+                    int fx = Convert.ToInt32(O.getMX(a) * 340.0 / length) + 30;
 
                     if (a == 0 && wsuw.Checked)//Wyróżnianie momentu utwardzenia 
                     {
-                        kolor = Color.DarkGray;
+                        color = Color.DarkGray;
                         znak = "U";
                     }
                     else
                     {
-                        kolor = Color.Cyan;
+                        color = Color.Cyan;
                         znak = "M";
                     }
 
 
                     if (fx >= 30)
                     {
-                        if (O.getM(a) > 0)//Moment dodatni
+                        if (O.getM(a) > 0)//positive moment
                         {
-                            g.DrawLine(new Pen(kolor, 1), fx, 95, fx, 105);
-                            g.DrawArc(new Pen(kolor, 2), fx - 15, 100 - 15, 30, 30, 180, 220);
+                            g.DrawLine(new Pen(color, 1), fx, 95, fx, 105);
+                            g.DrawArc(new Pen(color, 2), fx - 15, 100 - 15, 30, 30, 180, 220);
 
                             PointF[] points = new PointF[] { new PointF { X = fx - 22, Y = 100 }, new PointF { X = fx - 8, Y = 100 }, new PointF { X = fx - 15, Y = 110 } };
-                            g.FillPolygon(new SolidBrush(kolor), points);
+                            g.FillPolygon(new SolidBrush(color), points);
 
                             g.DrawString(znak + (a), new Font("ArialBold", 8), new SolidBrush(Color.Black), fx - 5, 130 + 10 * (a % 5));
 
                         }
 
-                        if (O.getM(a) < 0)//moment ujemny
+                        if (O.getM(a) < 0)//negative moment
                         {
-                            g.DrawLine(new Pen(kolor, 1), fx, 95, fx, 105);
-                            g.DrawArc(new Pen(kolor, 2), fx - 15, 100 - 15, 30, 30, 0, 120);
+                            g.DrawLine(new Pen(color, 1), fx, 95, fx, 105);
+                            g.DrawArc(new Pen(color, 2), fx - 15, 100 - 15, 30, 30, 0, 120);
 
                             PointF[] points = new PointF[] { new PointF { X = fx + 22, Y = 100 }, new PointF { X = fx + 8, Y = 100 }, new PointF { X = fx + 15, Y = 90 } };
-                            g.FillPolygon(new SolidBrush(kolor), points);
+                            g.FillPolygon(new SolidBrush(color), points);
 
                             g.DrawString(znak + (a), new Font("ArialBold", 8), new SolidBrush(Color.Black), fx - 5, 160 - 10 * (a % 5));
 
@@ -347,23 +349,23 @@ namespace Informatyka
 
             Graphics g = e.Graphics;
 
-            //czyszczenie obszaru rysowania
+            //clear drawing area
             g.Clear(Color.SeaShell);
 
-            //lewa podpora
+            //left support
             g.DrawEllipse(System.Drawing.Pens.Black, 30 - 4, 100 - 4, 8, 8);
             g.DrawLine(System.Drawing.Pens.Black, 30, 100, 30 + i, 100 + i);
             g.DrawLine(System.Drawing.Pens.Black, 30 - i, 100 + i, 30, 100);
             g.DrawLine(System.Drawing.Pens.Black, 30 - i, 100 + i, 30 + i, 100 + i);
 
-            //prawa podpora
+            //right support
             g.DrawEllipse(System.Drawing.Pens.Black, 370 - 4, 100 - 4, 8, 8);
             g.DrawLine(System.Drawing.Pens.Black, 370, 100, 370 + i, 100 + i);
             g.DrawLine(System.Drawing.Pens.Black, 370 - i, 100 + i, 370, 100);
             g.DrawLine(System.Drawing.Pens.Black, 370 - i, 100 + i, 370 + i, 100 + i);
             g.DrawLine(System.Drawing.Pens.Black, 370 - i, 100 + i + 5, 370 + i, 100 + i + 5);
 
-            //belka
+            //drawing the beam
             Pen p = new Pen(Color.Black, 3);
             g.DrawLine(p, 30, 100, 370, 100);
 
@@ -378,10 +380,10 @@ namespace Informatyka
         private void RysujBelkeUtwierdzona(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            //czyszczenie obszaru rysowania
+            //clear drawing area
             g.Clear(Color.SeaShell);
 
-            //belka
+            //drawing the beam
             Pen p = new Pen(Color.Black, 3);
             g.DrawLine(p, 30, 100, 370, 100);
 
@@ -393,7 +395,7 @@ namespace Informatyka
 
         }
 
-        //radiobuttony
+        //radiobuttons
         private void radioButton1_Click(object sender, EventArgs e)
         {
             button3_Click(sender, e);
@@ -404,22 +406,22 @@ namespace Informatyka
         }
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
         {
-            if (pionowe.Checked)
+            if (vertical.Checked)
             {
                 groupBox3.Visible = true;
-                button1.Text = "Dodaj Sily\ni Momenty";
+                addForces.Text = "Add Forces\n and Moments";
             }
 
             else
             {
                 groupBox3.Visible = false;
-                button1.Text = "Dodaj Sily";
+                addForces.Text = "Add Forces";
             }
 
             button3_Click(sender, e);
         }
 
-        //textboxy
+        //textboxes
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
             var currentCulture = System.Globalization.CultureInfo.InstalledUICulture;
@@ -430,165 +432,126 @@ namespace Informatyka
 
             if (double.TryParse(textBox3.Text, NumberStyles.Any, numberFormat, out w) && w > 0)
             {
-                dlugosc = w;
-                O.setDlugosc(dlugosc);
+                length = w;
+                O.setLength(length);
             }
             else
-                textBox3.Text = dlugosc.ToString();
+                textBox3.Text = length.ToString();
         }
 
-        //labele
+        //labels
         private void label4_MouseEnter(object sender, EventArgs e)
         {
-            label4.ForeColor = Color.Red;
-            label4.BackColor = Color.LightGray;
+            reactions_list.ForeColor = Color.Red;
+            reactions_list.BackColor = Color.LightGray;
         }
         private void label4_MouseHover(object sender, EventArgs e)
         {
-            label4.ForeColor = Color.Red;
-            label4.BackColor = Color.LightGray;
+            reactions_list.ForeColor = Color.Red;
+            reactions_list.BackColor = Color.LightGray;
         }
         private void label4_MouseLeave(object sender, EventArgs e)
         {
-            label4.ForeColor = Color.Black;
-            label4.BackColor = Color.SeaShell;
+            reactions_list.ForeColor = Color.Black;
+            reactions_list.BackColor = Color.SeaShell;
         }
 
-        //rysowanie wykresow
-        private void WlaczWykresy()
+        //drawing plots
+        private void turnPlotsOn()
         {
-            WykresyBox.Location = new Point(520, 260);
-            WykresyBox.Size = new Size(500, 300);
-            WykresyBox.BackColor = Color.LightBlue;
-            WykresyBox.Visible = true;
-            WykresyBox.Parent = pictureBox2;
-            Controls.Add(WykresyBox);
+            plotBox.Location = new Point(520, 260);
+            plotBox.Size = new Size(500, 300);
+            plotBox.BackColor = Color.LightBlue;
+            plotBox.Visible = true;
+            plotBox.Parent = pictureBox2;
+            Controls.Add(plotBox);
 
-            WykresyBox.Paint += new System.Windows.Forms.PaintEventHandler(RysujOsie);
+            plotBox.Paint += new System.Windows.Forms.PaintEventHandler(drawAxes);
 
 
                 if ((textBox1.Text.Length > 0 && textBox2.Text.Length > 0) || (textBox4.Text.Length > 0 && textBox5.Text.Length > 0))
                 {
-                    if (!pionowe.Checked)
-                        WykresyBox.Paint += new System.Windows.Forms.PaintEventHandler(RysujWykresPoziome);
+                    if (!vertical.Checked)
+                        plotBox.Paint += new System.Windows.Forms.PaintEventHandler(plotHorizontal);
                     else
-                        WykresyBox.Paint += new System.Windows.Forms.PaintEventHandler(RysujWykresPionowe);
+                        plotBox.Paint += new System.Windows.Forms.PaintEventHandler(plotVertical);
                 }
         }
-       /* private void RysujOsieWykres(object sender, PaintEventArgs e)
+        private void drawAxes(object sender, PaintEventArgs e)
         {
-            //funkja uruchamiana po dodaniu sil i wcisnieciu "Oblicz"
+            //function run after clicking the "calculate" button
             Graphics g = e.Graphics;
-            //czyszczenie obszaru rysowania
+            //clear drawing area
             g.Clear(Color.LightGray);
 
-            //osie wykresu                                                                    STRZAŁKI!!!!
-            Pen p = new Pen(Color.Black, 2);
-            g.DrawLine(p, 30, 30, 30, 270);
-            g.DrawLine(p, 30, 150, 370, 150);
-            
-            for(int a=0; a<O.getFX().Length; a++)
-            {
-                int fx = Convert.ToInt32(O.getFX(a) * 340.0 / dlugosc) + 30;
-                //zamiast wartosci 50 ponizej, trzeba wpisac wartosc maksymalna sumy sil dla lewych i prawych stron
-                int fy = Convert.ToInt32(150-O.getF(a) * 150.0 / 50 );
-                //zaznaczanie na osi x
-                g.FillRectangle(new SolidBrush(Color.Red), fx , 150, 6, 6);
-                //zaznaczanie na osi x i y
-                g.FillRectangle(new SolidBrush(Color.Blue), fx, fy, 6, 6);
-                //rysowanie pionowych linii
-                g.DrawLine(System.Drawing.Pens.Black,fx,150,fx,fy);
-                if(a>0)
-                {
-                    //poprzednie wartosci, rysowanie lini z poprzednimi wartosciami
-                    p.Color = Color.OrangeRed;
-                    int fxp = Convert.ToInt32(O.getFX(a-1) * 340.0 / dlugosc) + 30;
-                    //tu tez zamienic 50 na maksymalna wartosc
-                    int fyp = Convert.ToInt32(150-O.getF(a-1) * 150.0 / 50);
-                    
-                    g.DrawLine(p, fxp, fyp, fx, fy);
-
-                }
-
-            }
+            //drawing arrays
+            PointF[] arrayHorizontal = { new PointF(375, 145), new PointF(375, 155), new PointF(390, 150) };
+            PointF[] arrayVerticalLeft = { new PointF(25,270 ), new PointF(35, 270), new PointF(30, 285) };
+            PointF[] arrayVerticalRight = { new PointF(365, 270), new PointF(375, 270), new PointF(370, 285) };
 
 
-        }*/
-        private void RysujOsie(object sender, PaintEventArgs e)
-        {
-            //funkja uruchamiana po dodaniu sil i wcisnieciu "Oblicz"
-            Graphics g = e.Graphics;
-            //czyszczenie obszaru rysowania
-            g.Clear(Color.LightGray);
-
-            //strzalki
-            PointF[] strzalkap = { new PointF(375, 145), new PointF(375, 155), new PointF(390, 150) };
-            PointF[] strzalkad = { new PointF(25,270 ), new PointF(35, 270), new PointF(30, 285) };
-            PointF[] strzalkadp = { new PointF(365, 270), new PointF(375, 270), new PointF(370, 285) };
+            g.FillPolygon(new SolidBrush(Color.Black), arrayHorizontal);
+            g.FillPolygon(new SolidBrush(Color.Black), arrayVerticalLeft);
+            g.FillPolygon(new SolidBrush(Color.Black), arrayVerticalRight);
 
 
-            g.FillPolygon(new SolidBrush(Color.Black), strzalkap);
-            g.FillPolygon(new SolidBrush(Color.Black), strzalkad);
-            g.FillPolygon(new SolidBrush(Color.Black), strzalkadp);
-
-
-            //osie wykresu                                  
+            //drawing plot axes                                  
             Pen p = new Pen(Color.Black, 2);
             g.DrawLine(p, 30, 30, 30, 270);
             g.DrawLine(p, 30, 150, 375, 150);
             g.DrawLine(p, 370, 30, 370, 270);
         }
-        private void RysujWykresPoziome(object sender, PaintEventArgs e)
+        private void plotHorizontal(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
-            double skalaY;
-            double skalaX;
+            double scaleY;
+            double scaleX;
 
             try
             {
-                skalaY = 90.0 / O.getMaxPrzekrojowy();
-                skalaX = 340 / dlugosc;
+                scaleY = 90.0 / O.getMaxIntersectionMoment();
+                scaleX = 340 / length;
             }
             catch(OverflowException)
             {
-                skalaY = 0.0;
-                skalaX = 0.0;
-                label4.Text = " Błąd wprowadzania danych !!!";
+                scaleY = 0.0;
+                scaleX = 0.0;
+                reactions_list.Text = " Value input error!";
                 button3_Click(sender,e);
             }
 
             
 
-            double[,] tmp = O.getSilyPrzekrojowe();
+            double[,] tmp = O.getIntersectionForces();
 
             PointF[] points = new PointF[(2 * tmp.Length / 3)];
 
-            points[0].X = Convert.ToInt32(tmp[0, 0] * skalaX) + 30;
-            points[0].Y = Convert.ToInt32(tmp[1, 0] * skalaY) + 150;
+            points[0].X = Convert.ToInt32(tmp[0, 0] * scaleX) + 30;
+            points[0].Y = Convert.ToInt32(tmp[1, 0] * scaleY) + 150;
            
 
             for (int i = 1; i < points.Length; i++)
             {
-                points[i].X = Convert.ToInt32(tmp[0, i /2] * skalaX) + 30;
+                points[i].X = Convert.ToInt32(tmp[0, i /2] * scaleX) + 30;
 
                 if (i % 2 == 0)
-                    points[i].Y = Convert.ToInt32(tmp[1, i /2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[1, i /2] * scaleY) + 150;
                 else
-                    points[i].Y = Convert.ToInt32(tmp[2, i /2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[2, i /2] * scaleY) + 150;
             }
 
-            points[points.Length-1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * skalaX) + 30;
-            points[points.Length-1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * skalaY) + 150;
+            points[points.Length-1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * scaleX) + 30;
+            points[points.Length-1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * scaleY) + 150;
 
-            //podpis osi
+            //axes titles
             for (int i = 1; i < points.Length; i++)
             {
                 g.DrawLine(new Pen(Color.Green), 365, points[i].Y, 375, points[i].Y);
                 string s = tmp[2, (i-1) / 2].ToString();
-                Font czcionka = new Font("ArialBold", 6);
+                Font myfont = new Font("ArialBold", 6);
 
-                g.DrawString(s, czcionka, new SolidBrush(Color.Black), 380, points[i].Y - czcionka.Size / 2);
+                g.DrawString(s, myfont, new SolidBrush(Color.Black), 380, points[i].Y - myfont.Size / 2);
 
             }
 
@@ -596,91 +559,91 @@ namespace Informatyka
            
 
         }
-        private void RysujWykresPionowe(object sender, PaintEventArgs e)
+        private void plotVertical(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
-            //rysunek sił przekrojowych
-            double skalaY;
-            double skalaX;
+            //intersection forces drawing 
+            double scaleY;
+            double scaleX;
 
             try
             {
-                skalaY = 90.0 / O.getMaxPrzekrojowy();
-                skalaX = 340 / dlugosc;
+                scaleY = 90.0 / O.getMaxIntersectionMoment();
+                scaleX = 340 / length;
             }
             catch (OverflowException)
             {
-                skalaY = 0.0;
-                skalaX = 0.0;
-                label4.Text = " Błąd wprowadzania danych !!!";
+                scaleY = 0.0;
+                scaleX = 0.0;
+                reactions_list.Text = " Data input error!";
                 button3_Click(sender, e);
             }
 
-            double[,] tmp = O.getSilyPrzekrojowe(true);
+            double[,] tmp = O.getIntersectionForces(true);
 
             PointF[] points = new PointF[(2 * tmp.Length / 3)];
 
-            points[0].X = Convert.ToInt32(tmp[0, 0] * skalaX) + 30;
-            points[0].Y = Convert.ToInt32(tmp[1, 0] * skalaY) + 150;
+            points[0].X = Convert.ToInt32(tmp[0, 0] * scaleX) + 30;
+            points[0].Y = Convert.ToInt32(tmp[1, 0] * scaleY) + 150;
 
 
             for (int i = 1; i < points.Length - 1; i++)
             {
-                points[i].X = Convert.ToInt32(tmp[0, i / 2] * skalaX) + 30;
+                points[i].X = Convert.ToInt32(tmp[0, i / 2] * scaleX) + 30;
 
                 if (i % 2 == 0)
-                    points[i].Y = Convert.ToInt32(tmp[1, i / 2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[1, i / 2] * scaleY) + 150;
                 else
-                    points[i].Y = Convert.ToInt32(tmp[2, i / 2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[2, i / 2] * scaleY) + 150;
             }
 
-            points[points.Length - 1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * skalaX) + 30;
-            points[points.Length - 1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * skalaY) + 150;
+            points[points.Length - 1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * scaleX) + 30;
+            points[points.Length - 1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * scaleY) + 150;
 
             g.DrawLines(new Pen(Color.Red), points);
             for (int i = 1; i < points.Length; i++)
             {
                 g.DrawLine(new Pen(Color.Green), 365, points[i].Y, 375, points[i].Y);
                 string s = tmp[2, (i - 1) / 2].ToString();
-                Font czcionka = new Font("ArialBold", 6);
+                Font myfont = new Font("ArialBold", 6);
 
-                g.DrawString(s, czcionka, new SolidBrush(Color.Black), 380, points[i].Y - czcionka.Size / 2);
+                g.DrawString(s, myfont, new SolidBrush(Color.Black), 380, points[i].Y - myfont.Size / 2);
 
             }
 
-            //rysunek momentów przekrojowych
-            skalaY = 90.0 / O.getMaxPrzekrojowy(true, true);
-            skalaX = 340 / dlugosc;
+            // intersection moments drawing
+            scaleY = 90.0 / O.getMaxIntersectionMoment(true, true);
+            scaleX = 340 / length;
 
-            tmp = O.getMomentyPrzekrojowe();
+            tmp = O.getIntersectionMoments();
 
             points = new PointF[(2 * tmp.Length / 3) ];
 
-            points[0].X = Convert.ToInt32(tmp[0, 0] * skalaX) + 30;
-            points[0].Y = Convert.ToInt32(tmp[1, 0] * skalaY) + 150;
+            points[0].X = Convert.ToInt32(tmp[0, 0] * scaleX) + 30;
+            points[0].Y = Convert.ToInt32(tmp[1, 0] * scaleY) + 150;
 
 
             for (int i = 1; i < points.Length; i++)
             {
-                points[i].X = Convert.ToInt32(tmp[0, i / 2] * skalaX) + 30;
+                points[i].X = Convert.ToInt32(tmp[0, i / 2] * scaleX) + 30;
 
                 if (i % 2 == 0)
-                    points[i].Y = Convert.ToInt32(tmp[1, i / 2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[1, i / 2] * scaleY) + 150;
                 else
-                    points[i].Y = Convert.ToInt32(tmp[2, i / 2] * skalaY) + 150;
+                    points[i].Y = Convert.ToInt32(tmp[2, i / 2] * scaleY) + 150;
             }
 
-            points[points.Length - 1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * skalaX) + 30;
-            points[points.Length - 1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * skalaY) + 150;
-            //podpis osi
+            points[points.Length - 1].X = Convert.ToInt32(tmp[0, tmp.Length / 3 - 1] * scaleX) + 30;
+            points[points.Length - 1].Y = Convert.ToInt32(tmp[2, tmp.Length / 3 - 1] * scaleY) + 150;
+            //axes title
             for (int i = 1; i < points.Length; i++)
             {
                 g.DrawLine(new Pen(Color.Green), 25, points[i].Y, 35, points[i].Y);
                 Math.Round(tmp[2, i / 2], 1);
                 string s = tmp[2,i/2].ToString();
-                Font czcionka = new Font("ArialBold", 6);
-                g.DrawString(s, czcionka, new SolidBrush(Color.Black), 5, points[i].Y-czcionka.Size/2);
+                Font myfont = new Font("ArialBold", 6);
+                g.DrawString(s, myfont, new SolidBrush(Color.Black), 5, points[i].Y-myfont.Size/2);
 
             }
             g.DrawLines(new Pen(Color.Blue), points);
@@ -693,15 +656,15 @@ namespace Informatyka
         {
             InitializeComponent();
 
-            O.setDlugosc(dlugosc);
+            O.setLength(length);
 
             podpar.Select();
-            poziome.Select();
+            horizontal.Select();
 
-            WlaczRysowanie();
-            RysujPusteWykresy();
+            turnPaintingOn();
+            drawEmptyPlots();
         }
-        //Nowe rzeczy, podpisy,linki,logo AGH
+        //links, AGH logo, finishing touches before project presentation
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://www.agh.edu.pl/");
@@ -733,5 +696,14 @@ namespace Informatyka
             pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
         }
 
+        private void poziome_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
