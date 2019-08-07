@@ -1,3 +1,4 @@
+#That stuff is really outdated - we do not code like that anymore (Thank God)
 # Beam-mechanics
 Program draws shear force and bending moment diagrams for given load.
 
